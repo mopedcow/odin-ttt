@@ -1,6 +1,3 @@
-const title = document.getElementById('title');
-title.innerHTML = 'Console game!!';
-/* remove above code later */
 
 
 
@@ -11,10 +8,17 @@ const gameboard = (function () {
     return {row1, row2, row3};
 });
 
-const players = {
-    
-};
+function createPlayer (name, marker) {
+    return { name, marker };
+}
 
-const gameplay = {};
+function placeMarker(marker, row, col) {
+    row = `row${row}`;
+    currGame[row].splice(col, 1, marker);
+    console.log(currGame);
+}
+
+const player1 = createPlayer('Wallace', 'x');
+const player2 = createPlayer('Grommit', 'o');
 
 let currGame = gameboard();
