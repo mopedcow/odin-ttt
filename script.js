@@ -6,15 +6,20 @@ const gameboard = (function () {
 });
 
 function createPlayer (name, marker) {
-    return { name, marker };
+    let wins = 0;
+    return { name, marker, wins };
 }
 
+/* Wrap the below in 'gameplay' function? */
 function placeMarker (marker, row, col) {
     row = `row${row}`;
-    currGame[row].splice(col, 1, marker);
- 
+    if (currGame[row][col] === 'x' ||
+        currGame[row][col] === 'o') {
+            return console.log(`Please choose an empty space to place your marker`);
+        } else {
+            currGame[row].splice(col, 1, marker);
+        }
 }
-
 let turnCount = 0;
 function turnCounter () {
     return turnCount++;
@@ -58,6 +63,7 @@ function checkForWin (marker) {
 }
 function checkEndCondition (player, marker) {
     if (checkForWin(marker)) {
+        player.wins += 1;
         console.log(`${player.name} wins!!`);
     } else if (turnCount === 9) {
         console.log(`Stalemate :-(`);
@@ -65,19 +71,32 @@ function checkEndCondition (player, marker) {
         console.log(`No winner yet, game continues.`);
     }
 }
-
+function newGameBoard() {
+    console.log(`New game!!`);
+    currGame = gameboard();
+}
 const player1 = createPlayer('Wallace', 'x');
 const player2 = createPlayer('Grommit', 'o');
 
-let currGame = gameboard();
+let activePlayer = player1;
+let currGame;
+
+/* End 'gamplay' function */
 
 
+/* Testing below */
 
+newGameBoard();
 
 placeMarker(player2.marker, 0, 2);
-placeMarker(player2.marker, 1, 2);
+placeMarker(player2.marker, 1, 1);
 placeMarker(player2.marker, 2, 0);
 
 console.log(currGame);
 turnCount = 8;
 checkEndCondition(player2, player2.marker);
+
+placeMarker(player1.marker, 0, 2);
+
+newGameBoard();
+console.log(currGame);
