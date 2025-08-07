@@ -1,7 +1,3 @@
-
-
-let turnCount = 0;
-
 const gameboard = (function () {
     let row0 = ['n', 'n', 'n'];
     let row1 = ['n', 'n', 'n'];
@@ -18,6 +14,8 @@ function placeMarker (marker, row, col) {
     currGame[row].splice(col, 1, marker);
  
 }
+
+let turnCount = 0;
 function turnCounter () {
     return turnCount++;
 }
@@ -58,15 +56,28 @@ function checkForWin (marker) {
             return false;
         }
 }
+function checkEndCondition (player, marker) {
+    if (checkForWin(marker)) {
+        console.log(`${player.name} wins!!`);
+    } else if (turnCount === 9) {
+        console.log(`Stalemate :-(`);
+    } else {
+        console.log(`No winner yet, game continues.`);
+    }
+}
 
 const player1 = createPlayer('Wallace', 'x');
 const player2 = createPlayer('Grommit', 'o');
 
 let currGame = gameboard();
 
+
+
+
 placeMarker(player2.marker, 0, 2);
-placeMarker(player2.marker, 1, 1);
+placeMarker(player2.marker, 1, 2);
 placeMarker(player2.marker, 2, 0);
 
 console.log(currGame);
-console.log(checkForWin('o'));
+turnCount = 8;
+checkEndCondition(player2, player2.marker);
