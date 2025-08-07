@@ -16,18 +16,43 @@ function createPlayer (name, marker) {
 function placeMarker (marker, row, col) {
     row = `row${row}`;
     currGame[row].splice(col, 1, marker);
-    console.log(currGame);
+ 
 }
 function turnCounter () {
     return turnCount++;
 }
 function checkForWin (marker) {
-    if (currGame.row0[0] == marker &&
-        currGame.row1[0] == marker &&
-        currGame.row2[0] == marker ||
-        currGame.row0[1] == marker &&
-        currGame.row1[1] == marker &&
-        currGame.row2[1] == marker ) {
+    if (currGame.row0[0] === marker &&
+        currGame.row1[0] === marker &&
+        currGame.row2[0] === marker ||
+
+        currGame.row0[1] === marker &&
+        currGame.row1[1] === marker &&
+        currGame.row2[1] === marker ||
+
+        currGame.row0[2] === marker &&
+        currGame.row1[2] === marker &&
+        currGame.row2[2] === marker ||
+
+        currGame.row0[0] === marker &&
+        currGame.row0[1] === marker &&
+        currGame.row0[2] === marker ||
+
+        currGame.row1[0] === marker &&
+        currGame.row1[1] === marker &&
+        currGame.row1[2] === marker ||
+
+        currGame.row2[0] === marker &&
+        currGame.row2[1] === marker &&
+        currGame.row2[2] === marker ||
+
+        currGame.row0[0] === marker &&
+        currGame.row1[1] === marker &&
+        currGame.row2[2] === marker ||
+
+        currGame.row0[2] === marker &&
+        currGame.row1[1] === marker &&
+        currGame.row2[0] === marker ) {
             return true;
         } else {
             return false;
@@ -39,6 +64,9 @@ const player2 = createPlayer('Grommit', 'o');
 
 let currGame = gameboard();
 
-placeMarker(player1.marker, 0, 1);
-placeMarker(player1.marker, 1, 2);
-placeMarker(player1.marker, 2, 1);
+placeMarker(player2.marker, 0, 2);
+placeMarker(player2.marker, 1, 1);
+placeMarker(player2.marker, 2, 0);
+
+console.log(currGame);
+console.log(checkForWin('o'));
