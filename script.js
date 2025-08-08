@@ -15,6 +15,7 @@ function createPlayer (name, marker) {
 
 function playGame () {
     const gameboard = newBoard();
+    let activePlayer = player1;
     let turnCount = 1;
 
     const isOccupied = (row, col) => {
@@ -103,8 +104,6 @@ function playGame () {
 
 const player1 = createPlayer('Wallace', 'x');
 const player2 = createPlayer('Grommit', 'o');
-
-let activePlayer = player1;
 
 let newgame = playGame();
 
