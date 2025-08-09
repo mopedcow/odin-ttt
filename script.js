@@ -92,6 +92,7 @@ function playGame () {
             console.log(`---Stalemate: No One Wins---`);
             return console.log(`Game Over`);
         }
+        gameDisplay().drawMarkers();
         rotateActivePlayer();
         turnCounter();
         
@@ -99,7 +100,26 @@ function playGame () {
 
     return {
         playRound,
+        gameboard,
     };
+}
+
+function gameDisplay() {
+    const squares = document.querySelectorAll('.square');
+    const drawMarkers = () => {
+        squares[0].textContent = newgame.gameboard.row0[0];
+        squares[1].textContent = newgame.gameboard.row0[1];
+        squares[2].textContent = newgame.gameboard.row0[2];
+
+        squares[3].textContent = newgame.gameboard.row1[0];
+        squares[4].textContent = newgame.gameboard.row1[1];
+        squares[5].textContent = newgame.gameboard.row1[2];
+        
+        squares[6].textContent = newgame.gameboard.row2[0];
+        squares[7].textContent = newgame.gameboard.row2[1];
+        squares[8].textContent = newgame.gameboard.row2[2];
+    }
+    return { drawMarkers };
 }
 
 const player1 = createPlayer('Wallace', 'x');
@@ -107,7 +127,15 @@ const player2 = createPlayer('Grommit', 'o');
 
 let newgame = playGame();
 
-/* End 'gamplay' function */
+
+
+
+const displayStatus = document.querySelector('.status-text');
+displayStatus.textContent = `test`;
+
+
+
+/* testing in console below */
 
 
 /* player1 wins
@@ -117,26 +145,25 @@ newgame.playRound(0, 1);
 newgame.playRound(0, 0);
 newgame.playRound(1, 2);
 newgame.playRound(2, 2);
-*/
 
 newgame = playGame();
+*/
 
-/* Stalemate
+/* Stalemate */
 newgame.playRound(0, 0);
 newgame.playRound(1, 2);
 newgame.playRound(2, 2);
-newgame.playRound(1, 1);
-newgame.playRound(1, 0);
-newgame.playRound(2, 0);
-newgame.playRound(0, 2);
-newgame.playRound(0, 2);
-newgame.playRound(0, 1);
-newgame.playRound(2, 1);
-*/
+//newgame.playRound(1, 1);
+//newgame.playRound(1, 0);
+//newgame.playRound(2, 0);
+//newgame.playRound(0, 2);
+//newgame.playRound(0, 1);
+// newgame.playRound(2, 1);
 
-newgame = playGame();
 
-/* player 2 wins */
+
+
+/* player 2 wins 
 newgame.playRound(0, 1);
 newgame.playRound(1, 1);
 newgame.playRound(0, 0);
@@ -145,3 +172,4 @@ newgame.playRound(2, 2);
 newgame.playRound(2, 0);
 
 newgame = playGame();
+*/
