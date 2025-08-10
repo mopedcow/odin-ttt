@@ -1,32 +1,48 @@
+/*
 const newBoard = (function () {
     let row0 = ['n', 'n', 'n'];
     let row1 = ['n', 'n', 'n'];
     let row2 = ['n', 'n', 'n'];
     return {row0, row1, row2};
+}); */
+
+const newBoard = (function () {
+    return board = [ , , , , , , , , ,];
 });
 
-function createPlayer (name, marker) {
-    let wins = 0;
-    const getWins = () => wins;
-    const incWins = () => wins++;
-    const clearWins = () => wins = 0;
-    return { name, marker, getWins, incWins, clearWins };
-}
+
+function createPlayer (name, marker) { return { name, marker, } }
 
 function playGame () {
     const gameboard = newBoard();
+    
     let activePlayer = player1;
     let turnCount = 1;
 
-    const isOccupied = (row, col) => {
-        if (gameboard[row][col] !== 'n') {
+    const squares = document.querySelectorAll('.square');
+    for (i = 0; i < squares.length; i++) {
+        squares[i].addEventListener('click', (e) => {
+            console.log(e.target);
+            //which gameboard space does square[i] point to?
+            //splice activePlayer.marker into square[i]'s place in newgame.gameboard
+        });
+    }
+
+    const isOccupied = (place) => {
+        /*if (gameboard[row][col] !== 'n') {
+            return true;
+        } else {
+            return false;
+        }*/
+        if (gameboard[place] !== undefined) {
             return true;
         } else {
             return false;
         }
     }
-    const placeMarker = (marker, row, col) => {
-        gameboard[row].splice(col, 1, marker);
+    const placeMarker = (marker, place) => {
+        gameboard.splice(place, 1, marker);
+        console.log(gameboard);
     }
     const turnCounter = () => { turnCount++; }
     const rotateActivePlayer = () => {
@@ -37,6 +53,43 @@ function playGame () {
         }
     }
     const checkForWin = (marker) => {
+
+        if (gameboard[1] === marker &&
+            gameboard[2] === marker &&
+            gameboard[3] === marker ||
+
+            gameboard[4] === marker &&
+            gameboard[5] === marker &&
+            gameboard[6] === marker ||
+
+            gameboard[7] === marker &&
+            gameboard[8] === marker &&
+            gameboard[9] === marker ||
+
+            gameboard[1] === marker &&
+            gameboard[4] === marker &&
+            gameboard[7] === marker ||
+
+            gameboard[2] === marker &&
+            gameboard[5] === marker &&
+            gameboard[8] === marker ||
+
+            gameboard[3] === marker &&
+            gameboard[6] === marker &&
+            gameboard[9] === marker ||
+
+            gameboard[0] === marker &&
+            gameboard[5] === marker &&
+            gameboard[9] === marker ||
+
+            gameboard[3] === marker &&
+            gameboard[5] === marker &&
+            gameboard[7] === marker ) {
+                return true;
+            } else {
+                return false;
+            }
+        /*
         if (gameboard.row0[0] === marker &&
             gameboard.row1[0] === marker &&
             gameboard.row2[0] === marker ||
@@ -71,41 +124,38 @@ function playGame () {
                 return true;
             } else {
                 return false;
-            }
+            } */
     }
 
-    const playRound = (getRow, getCol) => {
-        getRow = `row${getRow}`;
+    const playRound = (getPlace) => {
+        //getRow = `row${getRow}`;
 
-        if (isOccupied(getRow, getCol)) { return console.log('error, occupied space'); }
+        if (isOccupied(getPlace)) { return console.log('error, occupied space'); }
         
-        placeMarker(activePlayer.marker, getRow, getCol);
-
-        console.log(`turn ${turnCount}`);
-        console.log(gameboard);
+        placeMarker(activePlayer.marker, getPlace);
+        //displayBoard().drawMarkers();
 
         if (checkForWin(activePlayer.marker)) {
-            activePlayer.incWins();
             console.log(`---${activePlayer.name} wins!!---`);
             return console.log(`Game Over`);
         } else if (turnCount === 9) {
             console.log(`---Stalemate: No One Wins---`);
             return console.log(`Game Over`);
         }
-        gameDisplay().drawMarkers();
+        
         rotateActivePlayer();
         turnCounter();
         
     }
-
     return {
         playRound,
         gameboard,
     };
 }
 
-function gameDisplay() {
+function displayBoard() {
     const squares = document.querySelectorAll('.square');
+
     const drawMarkers = () => {
         squares[0].textContent = newgame.gameboard.row0[0];
         squares[1].textContent = newgame.gameboard.row0[1];
@@ -119,6 +169,7 @@ function gameDisplay() {
         squares[7].textContent = newgame.gameboard.row2[1];
         squares[8].textContent = newgame.gameboard.row2[2];
     }
+
     return { drawMarkers };
 }
 
@@ -127,49 +178,3 @@ const player2 = createPlayer('Grommit', 'o');
 
 let newgame = playGame();
 
-
-
-
-const displayStatus = document.querySelector('.status-text');
-displayStatus.textContent = `test`;
-
-
-
-/* testing in console below */
-
-
-/* player1 wins
-newgame.playRound(1, 1);
-newgame.playRound(0, 1);
-newgame.playRound(0, 1);
-newgame.playRound(0, 0);
-newgame.playRound(1, 2);
-newgame.playRound(2, 2);
-
-newgame = playGame();
-*/
-
-/* Stalemate */
-newgame.playRound(0, 0);
-newgame.playRound(1, 2);
-newgame.playRound(2, 2);
-//newgame.playRound(1, 1);
-//newgame.playRound(1, 0);
-//newgame.playRound(2, 0);
-//newgame.playRound(0, 2);
-//newgame.playRound(0, 1);
-// newgame.playRound(2, 1);
-
-
-
-
-/* player 2 wins 
-newgame.playRound(0, 1);
-newgame.playRound(1, 1);
-newgame.playRound(0, 0);
-newgame.playRound(0, 2);
-newgame.playRound(2, 2);
-newgame.playRound(2, 0);
-
-newgame = playGame();
-*/
