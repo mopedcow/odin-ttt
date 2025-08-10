@@ -1,11 +1,3 @@
-/*
-const newBoard = (function () {
-    let row0 = ['n', 'n', 'n'];
-    let row1 = ['n', 'n', 'n'];
-    let row2 = ['n', 'n', 'n'];
-    return {row0, row1, row2};
-}); */
-
 const newBoard = (function () {
     return board = [ , , , , , , , , ,];
 });
@@ -22,18 +14,11 @@ function playGame () {
     const squares = document.querySelectorAll('.square');
     for (i = 0; i < squares.length; i++) {
         squares[i].addEventListener('click', (e) => {
-            console.log(e.target);
-            //which gameboard space does square[i] point to?
-            //splice activePlayer.marker into square[i]'s place in newgame.gameboard
+            playRound(e.target.id);
         });
     }
 
     const isOccupied = (place) => {
-        /*if (gameboard[row][col] !== 'n') {
-            return true;
-        } else {
-            return false;
-        }*/
         if (gameboard[place] !== undefined) {
             return true;
         } else {
@@ -42,7 +27,8 @@ function playGame () {
     }
     const placeMarker = (marker, place) => {
         gameboard.splice(place, 1, marker);
-        console.log(gameboard);
+        displayBoard().drawMarkers();
+        console.log(gameboard); //---for testing---//
     }
     const turnCounter = () => { turnCount++; }
     const rotateActivePlayer = () => {
@@ -54,17 +40,21 @@ function playGame () {
     }
     const checkForWin = (marker) => {
 
-        if (gameboard[1] === marker &&
-            gameboard[2] === marker &&
-            gameboard[3] === marker ||
+        if (gameboard[0] === marker &&
+            gameboard[1] === marker &&
+            gameboard[2] === marker ||
 
+            gameboard[3] === marker &&
             gameboard[4] === marker &&
-            gameboard[5] === marker &&
-            gameboard[6] === marker ||
+            gameboard[5] === marker ||
 
+            gameboard[6] === marker &&
             gameboard[7] === marker &&
-            gameboard[8] === marker &&
-            gameboard[9] === marker ||
+            gameboard[8] === marker ||
+
+            gameboard[0] === marker &&
+            gameboard[3] === marker &&
+            gameboard[6] === marker ||
 
             gameboard[1] === marker &&
             gameboard[4] === marker &&
@@ -74,66 +64,23 @@ function playGame () {
             gameboard[5] === marker &&
             gameboard[8] === marker ||
 
-            gameboard[3] === marker &&
-            gameboard[6] === marker &&
-            gameboard[9] === marker ||
-
             gameboard[0] === marker &&
-            gameboard[5] === marker &&
-            gameboard[9] === marker ||
+            gameboard[4] === marker &&
+            gameboard[8] === marker ||
 
-            gameboard[3] === marker &&
-            gameboard[5] === marker &&
-            gameboard[7] === marker ) {
+            gameboard[2] === marker &&
+            gameboard[4] === marker &&
+            gameboard[6] === marker ) {
                 return true;
             } else {
                 return false;
             }
-        /*
-        if (gameboard.row0[0] === marker &&
-            gameboard.row1[0] === marker &&
-            gameboard.row2[0] === marker ||
-
-            gameboard.row0[1] === marker &&
-            gameboard.row1[1] === marker &&
-            gameboard.row2[1] === marker ||
-
-            gameboard.row0[2] === marker &&
-            gameboard.row1[2] === marker &&
-            gameboard.row2[2] === marker ||
-
-            gameboard.row0[0] === marker &&
-            gameboard.row0[1] === marker &&
-            gameboard.row0[2] === marker ||
-
-            gameboard.row1[0] === marker &&
-            gameboard.row1[1] === marker &&
-            gameboard.row1[2] === marker ||
-
-            gameboard.row2[0] === marker &&
-            gameboard.row2[1] === marker &&
-            gameboard.row2[2] === marker ||
-
-            gameboard.row0[0] === marker &&
-            gameboard.row1[1] === marker &&
-            gameboard.row2[2] === marker ||
-
-            gameboard.row0[2] === marker &&
-            gameboard.row1[1] === marker &&
-            gameboard.row2[0] === marker ) {
-                return true;
-            } else {
-                return false;
-            } */
     }
 
     const playRound = (getPlace) => {
-        //getRow = `row${getRow}`;
-
         if (isOccupied(getPlace)) { return console.log('error, occupied space'); }
         
         placeMarker(activePlayer.marker, getPlace);
-        //displayBoard().drawMarkers();
 
         if (checkForWin(activePlayer.marker)) {
             console.log(`---${activePlayer.name} wins!!---`);
@@ -157,17 +104,17 @@ function displayBoard() {
     const squares = document.querySelectorAll('.square');
 
     const drawMarkers = () => {
-        squares[0].textContent = newgame.gameboard.row0[0];
-        squares[1].textContent = newgame.gameboard.row0[1];
-        squares[2].textContent = newgame.gameboard.row0[2];
+        squares[0].textContent = newgame.gameboard[0];
+        squares[1].textContent = newgame.gameboard[1];
+        squares[2].textContent = newgame.gameboard[2];
 
-        squares[3].textContent = newgame.gameboard.row1[0];
-        squares[4].textContent = newgame.gameboard.row1[1];
-        squares[5].textContent = newgame.gameboard.row1[2];
+        squares[3].textContent = newgame.gameboard[3];
+        squares[4].textContent = newgame.gameboard[4];
+        squares[5].textContent = newgame.gameboard[5];
         
-        squares[6].textContent = newgame.gameboard.row2[0];
-        squares[7].textContent = newgame.gameboard.row2[1];
-        squares[8].textContent = newgame.gameboard.row2[2];
+        squares[6].textContent = newgame.gameboard[6];
+        squares[7].textContent = newgame.gameboard[7];
+        squares[8].textContent = newgame.gameboard[8];
     }
 
     return { drawMarkers };
