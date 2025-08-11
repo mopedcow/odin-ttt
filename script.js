@@ -6,16 +6,35 @@ const newBoard = (function () {
 function createPlayer (name, marker) { return { name, marker, } }
 
 function playGame () {
-    const gameboard = newBoard();
-    
+    let gameboard = newBoard();
     let activePlayer = player1;
     let turnCount = 1;
+    let gameover = false;
+
+    displayBoard();
 
     const squares = document.querySelectorAll('.square');
     for (i = 0; i < squares.length; i++) {
         squares[i].addEventListener('click', (e) => {
             playRound(e.target.id);
         });
+    }
+
+    const resetButton = document.querySelector('#reset-button');
+    resetButton.addEventListener('click', (e) => {
+        resetGame();
+    })
+
+    const resetGame = () => {
+        for (i = 0; i < 9; i++) {
+            gameboard.splice(i, 1, undefined);
+        }
+        console.log(gameboard);
+        displayBoard().drawMarkers();
+        turnCount = 1;
+        gameover = false;
+        displayBoard().displayTurn(activePlayer);
+        
     }
 
     const isOccupied = (place) => {
@@ -27,16 +46,17 @@ function playGame () {
     }
     const placeMarker = (marker, place) => {
         gameboard.splice(place, 1, marker);
-        displayBoard().drawMarkers();
+        displayBoard().drawMarkers(gameboard);
         console.log(gameboard); //---for testing---//
     }
     const turnCounter = () => { turnCount++; }
     const rotateActivePlayer = () => {
         if (activePlayer == player1) {
-            return activePlayer = player2;
+            activePlayer = player2;
         } else {
-            return activePlayer = player1;
+            activePlayer = player1;
         }
+        displayBoard().displayTurn(activePlayer);
     }
     const checkForWin = (marker) => {
 
@@ -80,27 +100,49 @@ function playGame () {
     const playRound = (getPlace) => {
         if (isOccupied(getPlace)) { return console.log('error, occupied space'); }
         
+        if (gameover) { return; }
         placeMarker(activePlayer.marker, getPlace);
 
         if (checkForWin(activePlayer.marker)) {
             console.log(`---${activePlayer.name} wins!!---`);
-            return console.log(`Game Over`);
+            gameover = true;
+            return console.log(`gameover = ${gameover}`);
         } else if (turnCount === 9) {
             console.log(`---Stalemate: No One Wins---`);
-            return console.log(`Game Over`);
+            gameover = true;
+            return console.log(`gameover = ${gameover}`);
         }
-        
+
         rotateActivePlayer();
         turnCounter();
-        
     }
+
+
+
     return {
         playRound,
         gameboard,
+        activePlayer,
+        resetGame
     };
 }
 
 function displayBoard() {
+    const displayP1Name = document.querySelector('#player1-name');
+    const displayP2Name = document.querySelector('#player2-name');
+    const displayP1Marker = document.querySelector('#player1-marker');
+    const displayP2Marker = document.querySelector('#player1-marker');
+
+    displayP1Name.textContent = player1.name;
+    displayP2Name.textContent = player2.name;
+    displayP1Marker.textContent = `marker: ${player1.marker}`;
+    displayP2Marker.textContent = `marker: ${player2.marker}`;
+
+    const displayTurn = (activePlayer) => {
+        const displayNextTurn = document.querySelector('#display-next-turn');
+        displayNextTurn.textContent = activePlayer.marker;
+    }
+
     const squares = document.querySelectorAll('.square');
 
     const drawMarkers = () => {
@@ -117,11 +159,14 @@ function displayBoard() {
         squares[8].textContent = newgame.gameboard[8];
     }
 
-    return { drawMarkers };
+    return { 
+        drawMarkers,
+        displayTurn,
+     };
 }
+
 
 const player1 = createPlayer('Wallace', 'x');
 const player2 = createPlayer('Grommit', 'o');
 
 let newgame = playGame();
-
