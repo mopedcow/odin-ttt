@@ -42,4 +42,7 @@ body {
 .square {
     border: 1px solid yellow;
 }
+.hidden {
+    display: none;
+}
 

@@ -34,7 +34,7 @@ function playGame () {
         turnCount = 1;
         gameover = false;
         displayBoard().displayTurn(activePlayer);
-        
+        displayBoard().hideResult();
     }
 
     const isOccupied = (place) => {
@@ -104,13 +104,11 @@ function playGame () {
         placeMarker(activePlayer.marker, getPlace);
 
         if (checkForWin(activePlayer.marker)) {
-            console.log(`---${activePlayer.name} wins!!---`);
-            gameover = true;
-            return console.log(`gameover = ${gameover}`);
+            displayBoard().displayWinner(activePlayer);
+            return gameover = true;
         } else if (turnCount === 9) {
-            console.log(`---Stalemate: No One Wins---`);
-            gameover = true;
-            return console.log(`gameover = ${gameover}`);
+            displayBoard().displayStalemate();
+            return gameover = true;
         }
 
         rotateActivePlayer();
@@ -123,7 +121,7 @@ function playGame () {
         playRound,
         gameboard,
         activePlayer,
-        resetGame
+        resetGame,
     };
 }
 
@@ -131,15 +129,29 @@ function displayBoard() {
     const displayP1Name = document.querySelector('#player1-name');
     const displayP2Name = document.querySelector('#player2-name');
     const displayP1Marker = document.querySelector('#player1-marker');
-    const displayP2Marker = document.querySelector('#player1-marker');
+    const displayP2Marker = document.querySelector('#player2-marker');
+
+    const stalemate = document.querySelector('#display-stalemate');
+    const winner = document.querySelector('#display-winner');
+    const displayNextTurn = document.querySelector('#display-next-turn');
 
     displayP1Name.textContent = player1.name;
     displayP2Name.textContent = player2.name;
     displayP1Marker.textContent = `marker: ${player1.marker}`;
     displayP2Marker.textContent = `marker: ${player2.marker}`;
 
+    const displayWinner = (activePlayer) => {
+        winner.classList.remove('hidden');
+        winner.textContent = `Winner: ${activePlayer.name}`;
+    }
+    const displayStalemate = () => {
+        stalemate.classList.remove('hidden');
+    }
+    const hideResult = () => {
+        stalemate.classList.add('hidden');
+        winner.classList.add('hidden');
+    }
     const displayTurn = (activePlayer) => {
-        const displayNextTurn = document.querySelector('#display-next-turn');
         displayNextTurn.textContent = activePlayer.marker;
     }
 
@@ -162,6 +174,9 @@ function displayBoard() {
     return { 
         drawMarkers,
         displayTurn,
+        displayWinner,
+        displayStalemate,
+        hideResult,
      };
 }
 

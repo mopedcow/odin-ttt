@@ -26,7 +26,13 @@
         </div>
         <div id="reset-button-container"><button id="reset-button">New Game</button></div>
         <div id="status-display-container">
-            <div class="status-display">
+            <div class="stalemate-display">
+                <h2 id="display-stalemate" class="hidden">Stalemate</h2>
+            </div>
+            <div class="win-display">
+                <h2 id="display-winner" class="hidden"></h2>
+            </div>
+            <div class="turn-display">
                 <h2>Next turn: <span id="display-next-turn"></span></h2>
             </div>
 
@@ -34,11 +40,11 @@
         <div id="players-container">
             <div class="player1-info">
                 <span id="player1-name">name: player 1</span>
-                <span id="player1-marker">marker: x</span>
+                <span id="player1-marker"> x</span>
             </div>
             <div class="player2-info">
                 <span id="player2-name">name: player 1</span>
-                <span id="player2-marker">marker: x</span>
+                <span id="player2-marker"></span>
             </div>
         </div>
     </div>
