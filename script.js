@@ -21,8 +21,17 @@ function playGame () {
     }
 
     const resetButton = document.querySelector('#reset-button');
-    resetButton.addEventListener('click', (e) => {
+    resetButton.addEventListener('click', () => {
         resetGame();
+    })
+
+    const setP1Name = document.querySelector('#set-player1-name');
+    const setP2Name = document.querySelector('#set-player2-name');
+    setP1Name.addEventListener('click', () => {
+        player1 = createPlayer(document.querySelector('#player1-name').value, 'o');
+    })
+    setP2Name.addEventListener('click', () => {
+        player2 = createPlayer(document.querySelector('#player2-name').value, 'x');
     })
 
     const resetGame = () => {
@@ -115,8 +124,6 @@ function playGame () {
         turnCounter();
     }
 
-
-
     return {
         playRound,
         gameboard,
@@ -135,10 +142,10 @@ function displayBoard() {
     const winner = document.querySelector('#display-winner');
     const displayNextTurn = document.querySelector('#display-next-turn');
 
-    displayP1Name.textContent = player1.name;
-    displayP2Name.textContent = player2.name;
-    displayP1Marker.textContent = `marker: ${player1.marker}`;
-    displayP2Marker.textContent = `marker: ${player2.marker}`;
+    displayP1Name.value = player1.name;
+    displayP2Name.value = player2.name;
+    displayP1Marker.textContent = player1.marker;
+    displayP2Marker.textContent = player2.marker;
 
     const displayWinner = (activePlayer) => {
         winner.classList.remove('hidden');
@@ -156,7 +163,6 @@ function displayBoard() {
     }
 
     const squares = document.querySelectorAll('.square');
-
     const drawMarkers = () => {
         squares[0].textContent = newgame.gameboard[0];
         squares[1].textContent = newgame.gameboard[1];
@@ -170,7 +176,6 @@ function displayBoard() {
         squares[7].textContent = newgame.gameboard[7];
         squares[8].textContent = newgame.gameboard[8];
     }
-
     return { 
         drawMarkers,
         displayTurn,
@@ -181,7 +186,7 @@ function displayBoard() {
 }
 
 
-const player1 = createPlayer('Wallace', 'x');
-const player2 = createPlayer('Grommit', 'o');
+let player1 = createPlayer('Wallace', 'x');
+let player2 = createPlayer('Grommit', 'o');
 
 let newgame = playGame();
