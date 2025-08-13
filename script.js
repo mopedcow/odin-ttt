@@ -3,7 +3,17 @@ const newBoard = (function () {
 });
 
 
-function createPlayer (name, marker) { return { name, marker, } }
+function createPlayer (name, marker) { 
+    let wins = 0;
+    const incWins = () => { wins++; }
+    const showWins = () => { return wins; }
+    return { 
+        name, 
+        marker,
+        incWins,
+        showWins 
+    } 
+}
 
 function playGame () {
     let gameboard = newBoard();
@@ -25,16 +35,25 @@ function playGame () {
         resetGame();
     })
 
-    const setP1Name = document.querySelector('#set-player1-name');
-    const setP2Name = document.querySelector('#set-player2-name');
-    setP1Name.addEventListener('click', () => {
-        player1 = createPlayer(document.querySelector('#player1-name').value, 'o');
+    const newPlayerBtn = document.querySelector('#change-players-button');
+    const dialog = document.querySelector('#open-dialog');
+    newPlayerBtn.addEventListener('click', () => {
+        dialog.showModal();
     })
-    setP2Name.addEventListener('click', () => {
-        player2 = createPlayer(document.querySelector('#player2-name').value, 'x');
+
+    const submitButton = document.querySelector('#change-player-names');
+    submitButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const p1InputName = document.querySelector('#p1-new-name').value;
+        const p2InputName = document.querySelector('#p2-new-name').value;
+        player1 = createPlayer(p1InputName, 'x');
+        player2 = createPlayer(p2InputName, 'o');
+        resetGame();
+        dialog.close();
     })
 
     const resetGame = () => {
+        console.log('resetGame called');
         for (i = 0; i < 9; i++) {
             gameboard.splice(i, 1, undefined);
         }
@@ -42,7 +61,14 @@ function playGame () {
         displayBoard().drawMarkers();
         turnCount = 1;
         gameover = false;
-        displayBoard().displayTurn(activePlayer);
+        if (activePlayer === player1) {
+            activePlayer = player2;
+            displayBoard().displayTurn(player2);
+        } else {
+            activePlayer = player1;
+            displayBoard().displayTurn(player1);
+        }
+        
         displayBoard().hideResult();
     }
 
@@ -56,14 +82,21 @@ function playGame () {
     const placeMarker = (marker, place) => {
         gameboard.splice(place, 1, marker);
         displayBoard().drawMarkers(gameboard);
-        console.log(gameboard); //---for testing---//
     }
     const turnCounter = () => { turnCount++; }
+
     const rotateActivePlayer = () => {
-        if (activePlayer == player1) {
+        console.log(`rotateActivePlayer called`);
+        console.log(`marker placed: ${activePlayer.marker}`);
+        if (activePlayer === player1) {
             activePlayer = player2;
-        } else {
+            console.log(`next marker: ${activePlayer.marker}`);
+        } else if (activePlayer === player2) {
             activePlayer = player1;
+            console.log(`next marker: ${activePlayer.marker}`);
+        } else {
+            console.log(`something's wrong?`);
+            console.log(`activePlayer: ${activePlayer}`);
         }
         displayBoard().displayTurn(activePlayer);
     }
@@ -113,6 +146,7 @@ function playGame () {
         placeMarker(activePlayer.marker, getPlace);
 
         if (checkForWin(activePlayer.marker)) {
+            activePlayer.incWins();
             displayBoard().displayWinner(activePlayer);
             return gameover = true;
         } else if (turnCount === 9) {
@@ -128,26 +162,36 @@ function playGame () {
         playRound,
         gameboard,
         activePlayer,
+        player1,
+        player2,
         resetGame,
     };
 }
 
 function displayBoard() {
+    const p1Container = document.querySelector('#player1-container');
+    const p2Container = document.querySelector('#player2-container');
     const displayP1Name = document.querySelector('#player1-name');
     const displayP2Name = document.querySelector('#player2-name');
     const displayP1Marker = document.querySelector('#player1-marker');
     const displayP2Marker = document.querySelector('#player2-marker');
+    const displayP1Wins = document.querySelector('#p1-wins');
+    const displayP2Wins = document.querySelector('#p2-wins');
 
     const stalemate = document.querySelector('#display-stalemate');
     const winner = document.querySelector('#display-winner');
-    const displayNextTurn = document.querySelector('#display-next-turn');
+    const nextTurnMessage = document.querySelector('#display-next-turn');
+    const nextTurnMarker = document.querySelector('#next-turn-marker');
 
-    displayP1Name.value = player1.name;
-    displayP2Name.value = player2.name;
+    displayP1Name.textContent = player1.name;
+    displayP2Name.textContent = player2.name;
     displayP1Marker.textContent = player1.marker;
     displayP2Marker.textContent = player2.marker;
+    displayP1Wins.textContent = player1.showWins();
+    displayP2Wins.textContent = player2.showWins();
 
     const displayWinner = (activePlayer) => {
+        nextTurnMessage.classList.add('hidden');
         winner.classList.remove('hidden');
         winner.textContent = `Winner: ${activePlayer.name}`;
     }
@@ -157,9 +201,19 @@ function displayBoard() {
     const hideResult = () => {
         stalemate.classList.add('hidden');
         winner.classList.add('hidden');
+        nextTurnMessage.classList.add('hidden');
     }
     const displayTurn = (activePlayer) => {
-        displayNextTurn.textContent = activePlayer.marker;
+        nextTurnMessage.classList.remove('hidden');
+        nextTurnMarker.textContent = activePlayer.marker;
+        if (activePlayer === player1) {
+            p1Container.classList.add('player-next');
+            p2Container.classList.remove('player-next');
+        } else  {
+            p2Container.classList.add('player-next');
+            p1Container.classList.remove('player-next');
+        }
+        
     }
 
     const squares = document.querySelectorAll('.square');
@@ -176,6 +230,7 @@ function displayBoard() {
         squares[7].textContent = newgame.gameboard[7];
         squares[8].textContent = newgame.gameboard[8];
     }
+
     return { 
         drawMarkers,
         displayTurn,
@@ -184,9 +239,6 @@ function displayBoard() {
         hideResult,
      };
 }
-
-
 let player1 = createPlayer('Wallace', 'x');
 let player2 = createPlayer('Grommit', 'o');
-
 let newgame = playGame();

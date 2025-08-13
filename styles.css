@@ -45,4 +45,9 @@ body {
 .hidden {
     display: none;
 }
-
+.focused{
+    outline: 3px solid blue;
+}
+.player-next {
+    background: turquoise;
+}
