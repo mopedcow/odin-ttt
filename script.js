@@ -178,7 +178,8 @@ function displayBoard() {
     const displayP1Wins = document.querySelector('#p1-wins');
     const displayP2Wins = document.querySelector('#p2-wins');
 
-    const stalemate = document.querySelector('#display-stalemate');
+    const stalemateContainer = document.querySelector('.stalemate-display');
+    const winnerContainer = document.querySelector('.win-display');
     const winner = document.querySelector('#display-winner');
 
     displayP1Name.textContent = player1.name;
@@ -189,15 +190,15 @@ function displayBoard() {
     displayP2Wins.textContent = player2.showWins();
 
     const displayWinner = (activePlayer) => {
-        winner.classList.remove('hidden');
+        winnerContainer.classList.remove('hidden');
         winner.textContent = activePlayer.name;
     }
     const displayStalemate = () => {
-        stalemate.classList.remove('hidden');
+        stalemateContainer.classList.remove('hidden');
     }
     const hideResult = () => {
-        stalemate.classList.add('hidden');
-        winner.classList.add('hidden');
+        stalemateContainer.classList.add('hidden');
+        winnerContainer.classList.add('hidden');
     }
     const displayTurn = (activePlayer) => {
         if (activePlayer === player1) {

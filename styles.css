@@ -205,7 +205,8 @@ input:focus {
     border-right: 0px;
 }
 .hidden {
-    display: none;
+    height: 0;
+    overflow: hidden;
 }
 .player-next {
     border: 3px solid var(--main-text-color);
