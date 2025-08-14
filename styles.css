@@ -14,6 +14,7 @@ html {
     --background-color: white;
     --body-color: white;
     --main-text-color: darkslategrey;
+    --win-color: tomato;
 }
 @font-face {
     font-family: "WalterTurncoat";
@@ -59,7 +60,7 @@ input {
 }
 input:focus {
     outline: 0;
-    border: 2px solid red;
+    border: 2px solid var(--win-color);
 }
 #main-container {
     width: 800px;
@@ -145,7 +146,8 @@ input:focus {
     padding-right: 16px;
 }
 #reset-button-container button,
-#change-players-container button {
+#change-players-container button,
+#close-result-btn {
     width: 100%;
 }
 #reset-button-container {
@@ -153,18 +155,6 @@ input:focus {
 }
 #change-players-container {
     grid-area: button-new;
-}
-#status-display-container {
-    grid-area: status;
-    align-self: start;
-
-    height: 80px;
-    font-family: var(--title-font);
-    font-size: 1.8rem;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 #board {
     width: 460px;
@@ -227,13 +217,15 @@ dialog {
     border: 0;
     background: 0;
 }
-.form-window {
+.form-window,
+.status-display-container {
     width: 260px;
     margin: auto;
     position: relative;
     top: 40%;
 }
-.form-container {
+.form-container,
+.status-display-container {
     padding: 36px 56px;
     position: relative;
     bottom: 100px;
@@ -246,6 +238,30 @@ dialog {
     flex-direction: column;
     row-gap: 8px;
 }
-.form-container button {
+.form-container button,
+.close-result-container {
     margin-top: 8px;
 }
+.stalemate-display,
+.win-display {
+    font-family: var(--title-font);
+    font-size: 1.8rem;
+    color: var(--win-color);
+}
+.stalemate-display,
+.win-display,
+.close-result-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.win-display {
+    display: flex;
+    flex-direction: column;
+}
+.win-display h3,
+.win-display h2 {
+    line-height: 0.9;
+}
+

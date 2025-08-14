@@ -36,8 +36,7 @@ function playGame () {
     })
 
     const submitButton = document.querySelector('#change-player-names');
-    submitButton.addEventListener('click', (e) => {
-        //e.preventDefault();
+    submitButton.addEventListener('click', () => {
         const p1InputName = document.querySelector('#p1-new-name').value;
         const p2InputName = document.querySelector('#p2-new-name').value;
         player1 = createPlayer(p1InputName, 'x');
@@ -46,12 +45,18 @@ function playGame () {
         dialog.close();
     })
 
+    const openResult = document.querySelector('#display-result-dialog');
+    const closeResult = document.querySelector('#close-result-btn');
+    closeResult.addEventListener('click', () => {
+        resetGame();
+        openResult.close();
+    })
+
     const resetGame = () => {
         console.log('resetGame called');
         for (i = 0; i < 9; i++) {
             gameboard.splice(i, 1, undefined);
         }
-        console.log(gameboard);
         displayBoard().drawMarkers();
         turnCount = 1;
         gameover = false;
@@ -79,17 +84,10 @@ function playGame () {
     const turnCounter = () => { turnCount++; }
 
     const rotateActivePlayer = () => {
-        console.log(`rotateActivePlayer called`);
-        console.log(`marker placed: ${activePlayer.marker}`);
         if (activePlayer === player1) {
             activePlayer = player2;
-            console.log(`next marker: ${activePlayer.marker}`);
         } else if (activePlayer === player2) {
             activePlayer = player1;
-            console.log(`next marker: ${activePlayer.marker}`);
-        } else {
-            console.log(`something's wrong?`);
-            console.log(`activePlayer: ${activePlayer}`);
         }
         displayBoard().displayTurn(activePlayer);
     }
@@ -133,23 +131,25 @@ function playGame () {
     }
 
     const playRound = (getPlace) => {
-        if (isOccupied(getPlace)) { return console.log('error, occupied space'); }
-        
-        if (gameover) { return; }
+        if (isOccupied(getPlace) || gameover) { return; }  
+
         placeMarker(activePlayer.marker, getPlace);
 
         if (checkForWin(activePlayer.marker)) {
             activePlayer.incWins();
             displayBoard().displayWinner(activePlayer);
+            openResult.showModal();
             return gameover = true;
         } else if (turnCount === 9) {
             displayBoard().displayStalemate();
+            openResult.showModal();
             return gameover = true;
         }
 
         rotateActivePlayer();
         turnCounter();
     }
+
     let gameboard = newBoard();
     let activePlayer = player1;
     let turnCount = 1;
@@ -180,8 +180,6 @@ function displayBoard() {
 
     const stalemate = document.querySelector('#display-stalemate');
     const winner = document.querySelector('#display-winner');
-    const nextTurnMessage = document.querySelector('#display-next-turn');
-    const nextTurnMarker = document.querySelector('#next-turn-marker');
 
     displayP1Name.textContent = player1.name;
     displayP2Name.textContent = player2.name;
@@ -191,9 +189,8 @@ function displayBoard() {
     displayP2Wins.textContent = player2.showWins();
 
     const displayWinner = (activePlayer) => {
-        nextTurnMessage.classList.add('hidden');
         winner.classList.remove('hidden');
-        winner.textContent = `Winner: ${activePlayer.name}`;
+        winner.textContent = activePlayer.name;
     }
     const displayStalemate = () => {
         stalemate.classList.remove('hidden');
@@ -201,11 +198,8 @@ function displayBoard() {
     const hideResult = () => {
         stalemate.classList.add('hidden');
         winner.classList.add('hidden');
-        nextTurnMessage.classList.add('hidden');
     }
     const displayTurn = (activePlayer) => {
-        nextTurnMessage.classList.remove('hidden');
-        nextTurnMarker.textContent = activePlayer.marker;
         if (activePlayer === player1) {
             p1Container.classList.add('player-next');
             p2Container.classList.remove('player-next');
@@ -213,7 +207,6 @@ function displayBoard() {
             p2Container.classList.add('player-next');
             p1Container.classList.remove('player-next');
         }
-        
     }
 
     const squares = document.querySelectorAll('.square');

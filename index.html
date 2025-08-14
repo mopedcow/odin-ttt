@@ -44,25 +44,24 @@
                 <div class="square cell8" id="8"></div>
             </div>
         </div>
-    
-        <div id="status-display-container">
+    </div>
+
+    <dialog id="display-result-dialog" closedby="any">
+        <div class="status-display-container">
             <div class="stalemate-display">
                 <h2 id="display-stalemate" class="hidden">Stalemate</h2>
             </div>
             <div class="win-display">
+                <h3>Winner:</h3>
                 <h2 id="display-winner" class="hidden"></h2>
             </div>
-        <!-- Remove this -->
-            <div class="turn-display">
-                <h2 id="display-next-turn" class="hidden">Next turn: <span id="next-turn-marker"></span></h2>
-            </div>
-
-
+            <div class="close-result-container"><button id="close-result-btn">New Game</button></div>
         </div>
-    </div>
+    </dialog>
+
     <dialog id="open-dialog" closedby="any">
         <div class="form-window">
-                <div class="form-container">
+            <div class="form-container">
                 <label for="p1-new-name">Player 1 name:</label>
                 <input type='text' id="p1-new-name" maxlength=20 required value="Wallace">
 
