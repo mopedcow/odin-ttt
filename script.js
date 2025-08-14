@@ -16,12 +16,6 @@ function createPlayer (name, marker) {
 }
 
 function playGame () {
-    let gameboard = newBoard();
-    let activePlayer = player1;
-    let turnCount = 1;
-    let gameover = false;
-
-    displayBoard();
 
     const squares = document.querySelectorAll('.square');
     for (i = 0; i < squares.length; i++) {
@@ -43,7 +37,7 @@ function playGame () {
 
     const submitButton = document.querySelector('#change-player-names');
     submitButton.addEventListener('click', (e) => {
-        e.preventDefault();
+        //e.preventDefault();
         const p1InputName = document.querySelector('#p1-new-name').value;
         const p2InputName = document.querySelector('#p2-new-name').value;
         player1 = createPlayer(p1InputName, 'x');
@@ -68,7 +62,6 @@ function playGame () {
             activePlayer = player1;
             displayBoard().displayTurn(player1);
         }
-        
         displayBoard().hideResult();
     }
 
@@ -157,6 +150,13 @@ function playGame () {
         rotateActivePlayer();
         turnCounter();
     }
+    let gameboard = newBoard();
+    let activePlayer = player1;
+    let turnCount = 1;
+    let gameover = false;
+
+    dialog.showModal();
+    displayBoard();
 
     return {
         playRound,
@@ -239,6 +239,8 @@ function displayBoard() {
         hideResult,
      };
 }
-let player1 = createPlayer('Wallace', 'x');
-let player2 = createPlayer('Grommit', 'o');
+
+
+let player1 = createPlayer('Player 1', 'X');
+let player2 = createPlayer('Player 2', 'O');
 let newgame = playGame();
